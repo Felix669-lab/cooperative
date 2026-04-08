@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container fade-in">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5"><i class="fas fa-chart-line"></i> Cooperative Dashboard</h1>
+            <p class="lead">Real-time statistics and insights</p>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-5">
+        <div class="col-md-3 mb-3">
+            <div class="stat-card text-center">
+                <i class="fas fa-users fa-3x mb-3"></i>
+                <h3 class="display-6">{{ total_farmers }}</h3>
+                <p>Total Farmers</p>
+                <small class="text-muted">+12% this month</small>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card text-center" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <i class="fas fa-goat fa-3x mb-3"></i>
+                <h3 class="display-6">{{ total_goats }}</h3>
+                <p>Total Goats</p>
+                <small class="text-muted">+8% this month</small>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card text-center" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                <i class="fas fa-sheep fa-3x mb-3"></i>
+                <h3 class="display-6">{{ total_sheep }}</h3>
+                <p>Total Sheep</p>
+                <small class="text-muted">+15% this month</small>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card text-center" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333;">
+                <i class="fas fa-tractor fa-3x mb-3"></i>
+                <h3 class="display-6">{{ total_animals }}</h3>
+                <p>Total Animals</p>
+                <small class="text-muted">+10% this month</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row mb-5">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="fas fa-chart-pie"></i> Animal Distribution</h4>
+                </div>
+                <div class="card-body">
+                    <canvas id="animalChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="fas fa-chart-bar"></i> Top Counties</h4>
+                </div>
+                <div class="card-body">
+                    <canvas id="countyChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Registrations -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="fas fa-clock"></i> Recent Registrations</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Farmer Name</th>
+                                    <th>Farm Name</th>
+                                    <th>County</th>
+                                    <th>Animals</th>
+                                    <th>Registered On</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for farmer in recent_farmers %}
+                                <tr>
+                                    <td>{{ farmer.name }}</td>
+                                    <td>{{ farmer.farm_name }}</td>
+                                    <td>{{ farmer.county }}</td>
+                                    <td>
+                                        <span class="badge bg-success">
+                                            {{ farmer.number_of_animals }} 
+                                            {% if farmer.animal_type == 'GOAT' %}Goats{% else %}Sheep{% endif %}
+                                        </span>
+                                    </td>
+                                    <td>{{ farmer.registration_date|date:"M d, Y" }}</td>
+                                    <td>
+                                        <a href="{% url 'farmer_detail' farmer.id %}" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No farmers registered yet</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Animal Distribution Chart
+    const animalCtx = document.getElementById('animalChart').getContext('2d');
+    new Chart(animalCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Goats', 'Sheep'],
+            datasets: [{
+                data: [{{ total_goats }}, {{ total_sheep }}],
+                backgroundColor: ['#4CAF50', '#FF9800'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+
+    // County Distribution Chart
+    const countyCtx = document.getElementById('countyChart').getContext('2d');
+    new Chart(countyCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ county_labels|safe }},
+            datasets: [{
+                label: 'Number of Farmers',
+                data: {{ county_data|safe }},
+                backgroundColor: '#4CAF50',
+                borderRadius: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: true
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<style>
+    .stat-card {
+        transition: transform 0.3s;
+        cursor: pointer;
+        border-radius: 15px;
+        padding: 20px;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+    }
+    
+    canvas {
+        max-height: 300px;
+    }
+</style>
+{% endblock %}

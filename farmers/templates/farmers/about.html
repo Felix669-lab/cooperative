@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us{% endblock %}
+
+{% block content %}
+<div class="container fade-in">
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4">About Green Cooperative Farmers</h1>
+            <p class="lead">Empowering farmers since 2024</p>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80" 
+                 class="img-fluid rounded" alt="Farming">
+        </div>
+        <div class="col-md-6">
+            <h2>Our Mission</h2>
+            <p>To empower small-scale farmers through cooperative farming, providing access to markets, training, and resources for sustainable agriculture.</p>
+            
+            <h2 class="mt-4">Our Vision</h2>
+            <p>A thriving agricultural community where farmers prosper through cooperation and sustainable practices.</p>
+            
+            <h2 class="mt-4">Our Values</h2>
+            <ul>
+                <li><strong>Sustainability:</strong> Promoting environmentally friendly farming practices</li>
+                <li><strong>Community:</strong> Building strong farmer networks and support systems</li>
+                <li><strong>Innovation:</strong> Adopting modern farming techniques and technology</li>
+                <li><strong>Fairness:</strong> Ensuring equitable market access and pricing</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card bg-primary text-white text-center p-5" style="background: linear-gradient(135deg, var(--primary-green), var(--dark-green));">
+                <div class="card-body">
+                    <h2>Join Our Cooperative Today</h2>
+                    <p class="lead">Be part of a growing community of successful farmers</p>
+                    <a href="{% url 'register_farmer' %}" class="btn btn-light btn-lg mt-3">
+                        <i class="fas fa-user-plus"></i> Register Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

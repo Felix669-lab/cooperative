@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<div class="container fade-in">
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4">Contact Us</h1>
+            <p class="lead">Get in touch with our team</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3><i class="fas fa-envelope"></i> Send us a message</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3><i class="fas fa-address-card"></i> Contact Information</h3>
+                    <div class="mt-4">
+                        <p><i class="fas fa-map-marker-alt fa-fw text-success"></i> <strong>Address:</strong><br>
+                        Green Cooperative Farmers<br>
+                        P.O. Box 12345-00100<br>
+                        Nairobi, Kenya</p>
+                        
+                        <p><i class="fas fa-phone fa-fw text-success"></i> <strong>Phone:</strong><br>
+                        +254 700 123 456<br>
+                        +254 711 789 012</p>
+                        
+                        <p><i class="fas fa-envelope fa-fw text-success"></i> <strong>Email:</strong><br>
+                        info@greencooperative.co.ke<br>
+                        support@greencooperative.co.ke</p>
+                        
+                        <p><i class="fas fa-clock fa-fw text-success"></i> <strong>Office Hours:</strong><br>
+                        Monday - Friday: 8:00 AM - 5:00 PM<br>
+                        Saturday: 9:00 AM - 1:00 PM<br>
+                        Sunday: Closed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Maps Embed -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3><i class="fas fa-map"></i> Our Location</h3>
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.819582859605!2d36.82194231475355!3d-1.286570735998046!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10d3b3c2f8b1%3A0x5b8e9f1e7b6c5a3d!2sNairobi%2C%20Kenya!5e0!3m2!1sen!2s!4v1640000000000!5m2!1sen!2s" 
+                        width="100%" 
+                        height="400" 
+                        style="border:0; border-radius: 10px;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

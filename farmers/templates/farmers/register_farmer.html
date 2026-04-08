@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Register Farmer{% endblock %}
+
+{% block content %}
+<div class="container fade-in">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-user-plus"></i> Register New Farmer</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.name.id_for_label }}" class="form-label">Full Name</label>
+                                {{ form.name }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.id_number.id_for_label }}" class="form-label">ID Number</label>
+                                {{ form.id_number }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.phone_number.id_for_label }}" class="form-label">Phone Number</label>
+                                {{ form.phone_number }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.farm_name.id_for_label }}" class="form-label">Farm Name</label>
+                                {{ form.farm_name }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.county.id_for_label }}" class="form-label">County</label>
+                                {{ form.county }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.sub_county.id_for_label }}" class="form-label">Sub-County</label>
+                                {{ form.sub_county }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.ward.id_for_label }}" class="form-label">Ward</label>
+                                {{ form.ward }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.animal_type.id_for_label }}" class="form-label">Animal Type</label>
+                                {{ form.animal_type }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.number_of_animals.id_for_label }}" class="form-label">Number of Animals</label>
+                                {{ form.number_of_animals }}
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.animal_age.id_for_label }}" class="form-label">Animal Age (months)</label>
+                                {{ form.animal_age }}
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save"></i> Register Farmer
+                            </button>
+                            <a href="{% url 'farmer_list' %}" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block title %}Farmers Directory{% endblock %}
+
+{% block content %}
+<div class="container fade-in">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5"><i class="fas fa-users"></i> Farmers Directory</h1>
+            <p class="lead">Connect with our cooperative farmers</p>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" name="search" class="form-control" 
+                           placeholder="Search by name, farm, or county..." 
+                           value="{{ search_query }}">
+                </div>
+                <div class="col-md-3">
+                    <select name="animal_type" class="form-select">
+                        <option value="">All Animals</option>
+                        <option value="GOAT" {% if animal_filter == 'GOAT' %}selected{% endif %}>Goats Only</option>
+                        <option value="SHEEP" {% if animal_filter == 'SHEEP' %}selected{% endif %}>Sheep Only</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="county" class="form-select">
+                        <option value="">All Counties</option>
+                        {% for county in counties %}
+                        <option value="{{ county }}" {% if county_filter == county %}selected{% endif %}>
+                            {{ county }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search"></i> Filter
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Farmers Grid -->
+    <div class="row">
+        {% for farmer in farmers %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <div class="rounded-circle bg-success text-white d-inline-flex align-items-center justify-content-center" 
+                             style="width: 80px; height: 80px; font-size: 2rem;">
+                            <i class="fas fa-user-farmer"></i>
+                        </div>
+                    </div>
+                    <h4 class="card-title text-center">{{ farmer.name }}</h4>
+                    <p class="text-muted text-center">{{ farmer.farm_name }}</p>
+                    <hr>
+                    <div class="mb-2">
+                        <i class="fas fa-map-marker-alt text-success"></i> 
+                        {{ farmer.county }}, {{ farmer.sub_county }}
+                    </div>
+                    <div class="mb-2">
+                        <i class="fas fa-phone text-success"></i> 
+                        {{ farmer.phone_number }}
+                    </div>
+                    <div class="mb-2">
+                        <i class="fas fa-paw text-success"></i> 
+                        <span class="badge {% if farmer.animal_type == 'GOAT' %}bg-success{% else %}bg-warning{% endif %}">
+                            {{ farmer.number_of_animals }} 
+                            {% if farmer.animal_type == 'GOAT' %}Goats{% else %}Sheep{% endif %}
+                        </span>
+                        <small class="text-muted"> ({{ farmer.animal_age }} months)</small>
+                    </div>
+                    <div class="d-grid gap-2 mt-3">
+                        <a href="{% url 'farmer_detail' farmer.id %}" class="btn btn-primary">
+                            <i class="fas fa-eye"></i> View Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle fa-2x mb-2"></i>
+                <h4>No farmers found</h4>
+                <p>Try adjusting your search or filter criteria</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if farmers.has_other_pages %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if farmers.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if animal_filter %}&animal_type={{ animal_filter }}{% endif %}{% if county_filter %}&county={{ county_filter }}{% endif %}">
+                    <i class="fas fa-angle-double-left"></i>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ farmers.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if animal_filter %}&animal_type={{ animal_filter }}{% endif %}{% if county_filter %}&county={{ county_filter }}{% endif %}">
+                    <i class="fas fa-angle-left"></i>
+                </a>
+            </li>
+            {% endif %}
+
+            {% for num in farmers.paginator.page_range %}
+                {% if farmers.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% elif num > farmers.number|add:'-3' and num < farmers.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if animal_filter %}&animal_type={{ animal_filter }}{% endif %}{% if county_filter %}&county={{ county_filter }}{% endif %}">
+                            {{ num }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if farmers.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ farmers.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if animal_filter %}&animal_type={{ animal_filter }}{% endif %}{% if county_filter %}&county={{ county_filter }}{% endif %}">
+                    <i class="fas fa-angle-right"></i>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ farmers.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if animal_filter %}&animal_type={{ animal_filter }}{% endif %}{% if county_filter %}&county={{ county_filter }}{% endif %}">
+                    <i class="fas fa-angle-double-right"></i>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<style>
+    .card {
+        transition: all 0.3s;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .rounded-circle {
+        background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+    }
+    
+    .badge {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .pagination .page-link {
+        border-radius: 8px;
+        margin: 0 5px;
+        color: var(--primary-green);
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: var(--primary-green);
+        border-color: var(--primary-green);
+    }
+</style>
+{% endblock %}
