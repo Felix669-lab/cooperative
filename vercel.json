@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "cooperative/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "green_cooperative/wsgi.py"
+    }
+  ]
+}
